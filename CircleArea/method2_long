@@ -1,0 +1,87 @@
+class Circle{
+  constructor(x, y, diam){
+    this.x = x;
+    this.y = y; 
+    this.diam = diam;
+    
+    this.draw = function(){
+      circle(x,y, diam);
+    }
+    this.update = function (){
+      this.draw();
+    }
+  }
+}
+
+class Point_A{
+  constructor(x, y){
+    this.x = x;
+    this.y = y;
+    this.counted = false;
+    this.draw = function(){
+      point(x,y);
+    }
+    this.update = function (){
+      this.draw();
+    }
+  }
+}
+
+
+let x,y;
+
+let rayon = 1;
+let ratio = 400;
+
+var circ = new Circle(rayon/2*ratio, rayon/2*ratio, rayon*ratio);
+
+var points = [];
+function setup() {
+  createCanvas(rayon*ratio, rayon*ratio);
+}
+let incircle = 0;
+function draw() {
+  background(220);
+  push();
+  translate(0,0);
+  strokeWeight(2);
+  fill(0,0,0,0);
+  circ.update();
+  pop();
+  for(var j = 0; j < 200; j++){
+    
+    var rndX = random(-rayon*ratio, rayon*ratio);
+    var rndY = random(-rayon*ratio, rayon*ratio);
+    append(points, new Point_A(rndX, rndY));
+
+    for(var i = 0; i < points.length; i++){
+      stroke('blue');
+      strokeWeight(2);
+
+      push()
+      translate(rayon/2*ratio,rayon/2*ratio)
+
+      let segment = sqrt(points[i].x**2 + points[i].y**2); // distance from the center to a point
+
+      if(segment < rayon/2*ratio){ // if the point is in the circle
+        if(!points[i].counted){
+          points[i].counted = true;
+          incircle ++;
+        }
+
+        stroke('green');
+
+        points[i].update();
+
+      }else{
+
+      points[i].update();
+
+      }
+      pop();
+    }
+  }
+  //print('in circle ', incircle);
+  //print('total ', points.length);
+  print((incircle/points.length)*4);
+}
